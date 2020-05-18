@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #app {
+            border: 1px solid rgba(39, 207, 142);
+            width: 300px;
+            margin: 50px auto;
+            height: 150px;
+            text-align: center;
+        }
+
+        button {
+            background: rgba(55, 131, 251);
+            color: #fff;
+            padding: 5px;
+            outline: none;
+            border: none;
+        }
+
+        #mybox {
+            padding-top: 28px;
+        }
+
+        #counter {
+            color: rgba(39, 207, 142);
+            padding-bottom: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 在Vue2中组件props中的数据只能单向流动，即只能从父组件通过组件的DOM属性attribute传递props给子组件，
+        子组件只能被动接收父组件传递过来的数据，并且在子组件中，不能修改由父组件传来的props数据。 -->
+    <!-- 父组件 -->
+    <div id="app">
+        <demo :mycounter="count"></demo>
+    </div>
+    <!-- 子组件 -->
+    <template id="mytemplate">
+        <div id="mybox">
+            <div id="counter">{{mycounters}}</div>
+            <button @click="add">增加1</button>
+            <button @click="decrease">减小1</button>
+        </div>
+    </template>
+
+</body>
+
+</html>
+<script>
+    // 父组件
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            count: 0,
+        },
+        // 子组件
+        components: {
+            "demo": {
+                template: "#mytemplate",
+                methods: {
+                    add() {
+                        console.log("增加了")
+                        this.mycounters++;//这个报错的原因就是props值不能被改变
+                        console.log(this)
+                    },
+                    decrease() {
+                        console.log("减小了")
+                        this.mycounters--;//这个报错的原因就是props值不能被改变
+
+                    }
+                },
+                data() {
+                    return {
+                        mycounters: this.mycounter
+
+                    }
+                },
+                props: ["mycounter"]
+            }
+        }
+    })
+</script>
